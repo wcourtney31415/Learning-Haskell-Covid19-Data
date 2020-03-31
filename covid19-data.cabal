@@ -64,10 +64,10 @@ executable covid19-data
 
   -- Other library packages from which modules are imported.
   build-depends:       base >=4.12 && <4.13
+                      , split
 
   -- Directories containing source files.
   hs-source-dirs:      src
 
   -- Base language which the package is written in.
   default-language:    Haskell2010
-
