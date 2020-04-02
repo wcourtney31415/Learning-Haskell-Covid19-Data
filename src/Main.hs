@@ -2,16 +2,32 @@ module Main where
 
 import Data.List.Split
 
+type CSVFile = String
+type CSVTable = [[String]]
+type Date = String
+type NumOfCases = String
+type DateCaseInfo = (Date, NumOfCases)
+type Country = String
+type FormattedRecord = (Country, [DateCaseInfo])
+
 main :: IO ()
 main = do
-       file <- readFile "data.csv"
-       let rowsOfStrings = lines file
-       let datafyIt list = map (splitOn "," ) list
-       let countryList = datafyIt rowsOfStrings
-       mapM_ print $ generateDataFromCSV countryList
+       csvFile <- readFile "data.csv"
+       mapM_ print $ getDataFromCSVFile $ makeCsvTable csvFile
 
-generateDataFromCSV :: [[String]] -> [([Char], [(String, [Char])])]
-generateDataFromCSV countryList =
+makeCsvTable :: CSVFile -> CSVTable
+makeCsvTable csvFile =
+  let
+    breakRowsIntoCells :: [String] -> CSVTable
+    breakRowsIntoCells listOfStrings = map (splitOn "," ) listOfStrings
+
+    fileAsRowsOfStrings = lines csvFile
+    csvTable = breakRowsIntoCells fileAsRowsOfStrings
+  in
+    csvTable
+
+getDataFromCSVFile :: CSVTable -> [FormattedRecord]
+getDataFromCSVFile countryList =
   let
   concatFirstTwo record =
     let
